@@ -1,0 +1,40 @@
+# LoRA LLM Fine-Tuning Configuration
+
+# Reproducibility
+seed: 42  # Set for deterministic training
+
+# Wandb
+wandb_run_name: null  # Optional: set a custom run name
+
+# Model & Data
+model_name: meta-llama/Meta-Llama-3-8B-Instruct
+dataset_id: openai/gsm8k
+output_dir: ./lora-out
+
+# Training Hardware & Batching
+epochs: 3
+batch_size: 4     # Per-device batch size
+grad_accum: 4     # Gradient accumulation steps
+
+# Optimizer Selection
+optimizer: smuon  # Options: adamw, muon, smuon
+
+# Muon/SMuon Base Parameters
+muon_lr: 0.02
+muon_momentum: 0.95
+muon_wd: 0.0
+
+# AuxAdam Parameters (for 1D tensors like biases/LayerNorms)
+adam_lr: 3.0e-4
+adam_wd: 0.001
+beta1: 0.90
+beta2: 0.95
+
+# SMuon Specific Parameters
+smuon_interval: 100     # How often to compute activation SVs
+sv_momentum: 0.95       # Momentum for activation singular values
+pmin: 1.02
+pmax: 10.0
+p_method: approx_momentum # Options: exact, approx, approx_momentum, exact_momentum
+subsampling_ratio: 0.1  # Fraction of singular values for approx methods
+init_p: pmax

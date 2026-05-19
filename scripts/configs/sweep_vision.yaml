@@ -1,0 +1,61 @@
+program: scripts/vision.py
+method: random
+run_cap: 100
+command:
+  - /path/to/accelerate/bin
+  - launch
+  - --mixed_precision=bf16
+  - ${program}
+  - ${args}
+metric:
+  name: val/accuracy
+  goal: maximize
+
+parameters:
+  # Fixed parameters
+  model_name:
+    value: vit_small_patch16_224
+  epochs:
+    value: 50
+  batch_size:
+    value: 512
+  smuon_interval:
+    value: 30
+  coeff_method:
+    value: safe_lagrangian
+  sv_momentum:
+    value: 0.99
+  beta1:
+    value: 0.9
+  eps:
+    value: 1.0e-8
+  eta_min:
+    value: 1.0e-7
+  pmin:
+    value: 1.01
+  pmax:
+    value: 400
+
+  # Sweep parameters
+  optimizer:
+    values: [smuon, muon]
+  preconditioner:
+    values: [none, padam, padagrad, padafactor]
+  weight_decay_method:
+    values: [standard, schatten_approx, loglinear_interp]
+  muon_lr:
+    values: [0.0001, 0.001, 0.01]
+  adam_lr:
+    values: [3.0e-4, 1.0e-3]
+  muon_wd:
+    values: [0.0, 0.1]
+  adam_wd:
+    values: [0.0, 0.1]
+  dual_scaling:
+    values: [true, false]
+  scaled:
+    values: [true, false]
+  muon_momentum:
+    values: [0.9, 0.95]
+  beta2:
+    values: [0.99, 0.999, 0.9999]

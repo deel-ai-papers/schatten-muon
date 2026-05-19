@@ -1,0 +1,39 @@
+# Vision Model Training Configuration
+
+# Reproducibility
+seed: 0  # Set for deterministic training
+
+# Wandb
+wandb_run_name: null  # Optional: set a custom run name
+
+# Model
+model_name: vit_small_patch16_224
+
+# Training
+epochs: 100
+batch_size: 512
+
+# Optimizer
+optimizer: smuon
+muon_lr: 0.02
+muon_momentum: 0.95
+sv_momentum: 0.99
+smuon_interval: 10
+muon_wd: 0.0
+adam_wd: 0.0
+adam_lr: 1.0e-3
+beta1: 0.95
+beta2: 0.99
+moment_type: none  # Options: none, padam, padagrad, padafactor, psania, adam, adagrad, adafactor, sania
+eps: 1.0e-8
+sgd_lr: 1.0e-2
+sgd_momentum: 0.9
+pmin: 1.02
+pmax: 10.0
+p_method: exact_momentum  # Options: exact, approx, approx_momentum, exact_momentum
+subsampling_ratio: 0.1  # Fraction of singular values for approx methods (ignored by exact methods)
+init_p: pmax
+
+# LR Scheduler (Cosine Annealing)
+eta_min: 1.0e-7
+tag: "none"

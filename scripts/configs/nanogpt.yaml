@@ -1,0 +1,64 @@
+# NanoGPT Training Configuration
+# Supports optimizer: adamw | muon | smuon
+
+# Reproducibility
+seed: 0
+
+# Wandb
+use_wandb: false
+wandb_project: nanogpt
+wandb_run_name: null  # Optional: set a custom run name
+
+# Data
+train_files: data/fineweb10B/fineweb_train_*.bin
+val_files: data/fineweb10B/fineweb_val_*.bin
+val_tokens: 1048576
+
+# Model
+vocab_size: 50257
+num_layers: 11
+num_heads: 6
+head_dim: 128
+model_dim: 768
+doc_max_len: 2048
+bigram_vocab_size: 251520  # 50304 * 5
+
+# Attention windows (in tokens, one block = 128 tokens)
+window_short: 640   # 5 * 128
+window_long: 1408   # 11 * 128
+
+# Training
+batch_tokens: 16384
+grad_accum_steps: 1
+num_iterations: 2000
+warmup_steps: 100
+grad_clip: 1.0
+lr_floor_frac: 0.1  # cosine LR floor as a fraction of the peak LR
+
+# Optimizer selection
+optimizer: adamw  # adamw | muon | smuon
+
+# AdamW / auxiliary Adam settings (used by all optimizers for scalar/bias params)
+adam_lr: 1.0e-3
+adam_wd: 0.01
+beta1: 0.9
+beta2: 0.95
+
+# Muon settings (used by muon and smuon)
+muon_lr: 0.02
+muon_wd: 0.0
+muon_momentum: 0.95
+
+# SMuon-specific settings
+sv_momentum: 0.99
+smuon_interval: 100  # steps between p-state updates
+eps: 1.0e-8
+pmin: 1.02
+pmax: 10.0
+p_method: exact_momentum  # Options: exact | approx | approx_momentum | exact_momentum
+subsampling_ratio: 0.1    # Fraction of singular values for approx methods
+init_p: pmax
+
+# Logging
+log_every: 10
+val_every: 250
